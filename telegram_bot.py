@@ -2,24 +2,20 @@ import requests
 from datetime import datetime
 import config
 
-# Indique au main.py que le module est bien chargé
 BOT_IS_READY = True
 
 def send_signal(signal):
-    """
-    Envoie un signal de trading formaté proprement sur Telegram.
-    """
-    # On récupère les infos
+    """Envoie un signal sur Telegram"""
+    
+    # Récupération des infos
     crypto = signal.get('symbol', 'Inconnu')
     score = signal.get('score', 0)
     price = signal.get('price', 0.0)
     level = signal.get('level', 'INCONNU')
     reasons = signal.get('reasons', [])
     
-    # On met en forme les raisons avec des puces
     raisons_texte = "\n".join([f"✅ {r}" for r in reasons]) if reasons else "✅ Analyse standard"
     
-    # Le design du message
     message = f"""
 {level} <b>SIGNAL AEGIS</b> {level}
 
@@ -31,15 +27,17 @@ def send_signal(signal):
 {raisons_texte}
 
 ⏰ <b>Heure:</b> {datetime.now().strftime('%H:%M:%S')}
-📅 <b>Date:</b> {datetime.now().strftime('%Y-%m-%d')}
     """.strip()
 
-    # Récupération des secrets depuis config.py (qui lit le coffre-fort GitHub)
+    # Récupération des secrets
     token = config.TELEGRAM_BOT_TOKEN
     chat_id = config.TELEGRAM_CHAT_ID
 
+    print(f" Token: {token[:20]}..." if token else "❌ Token manquant")
+    print(f"🔍 Chat ID: {chat_id}" if chat_id else "❌ Chat ID manquant")
+
     if not token or not chat_id:
-        print("❌ Erreur: Token ou Chat ID manquant dans la configuration !")
+        print("❌ ERREUR: Token ou Chat ID manquant !")
         return False
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
@@ -50,13 +48,15 @@ def send_signal(signal):
     }
     
     try:
+        print(f"📤 Envoi vers Telegram...")
         reponse = requests.post(url, params=params, timeout=10)
+        
         if reponse.status_code == 200:
-            print(f"✅ Signal envoyé sur Telegram : {crypto} ({level})")
+            print(f"✅ Signal envoyé : {crypto}")
             return True
         else:
-            print(f" Erreur Telegram : {reponse.text}")
+            print(f"❌ Erreur Telegram ({reponse.status_code}): {reponse.text}")
             return False
-    except requests.exceptions.RequestException as e:
-        print(f"⚠️ Problème de connexion Telegram : {e}")
+    except Exception as e:
+        print(f"❌ Exception Telegram: {e}")
         return False
