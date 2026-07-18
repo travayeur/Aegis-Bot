@@ -6,7 +6,6 @@ from telegram_bot import send_signal
 async def main():
     print("🤖 Démarrage...")
     
-    # Un seul cycle d'analyse
     filtered_coins = get_filtered_coins()
     print(f"✅ {len(filtered_coins)} cryptos trouvées")
     
