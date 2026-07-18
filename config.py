@@ -7,12 +7,12 @@ import os
 
 # ==================== FILTRAGE DES CRYPTOS ====================
 # Volume minimum en 24h (en dollars) pour qu'une crypto soit analysée
-MIN_VOLUME_24H = 5_000_000  # 5 millions de dollars (au lieu de 10M)
+MIN_VOLUME_24H = 2_000_000  # 2 millions de dollars (au lieu de 5M)
 
 # ==================== SYSTÈME DE SCORING ====================
 # Seuils pour les différents niveaux de signaux
-SCORE_BRONZE = 60    # Signal basique
-SCORE_ARGENT = 75    # Bon signal
+SCORE_BRONZE = 50    # Signal basique (au lieu de 60 - PLUS FACILE)
+SCORE_ARGENT = 70    # Bon signal (au lieu de 75)
 SCORE_OR = 85        # Signal exceptionnel
 
 # ==================== TIMEFRAMES (Unités de temps) ====================
@@ -29,8 +29,8 @@ EXCLUDED_COINS = [
 QUOTE_ASSET = 'USDT'
 
 # ==================== PARAMÈTRES DU BOT ====================
-SCAN_INTERVAL = 3600  # 1 heure = 3600 secondes
-MAX_COINS_TO_ANALYZE = 500  # 500 cryptos (au lieu de 300)
+SCAN_INTERVAL = 900  # 15 minutes = 900 secondes (au lieu de 3600)
+MAX_COINS_TO_ANALYZE = 500  # 500 cryptos
 
 # ==================== PARAMÈTRES DE RISQUE ====================
 MAX_RISK_PER_TRADE = 2
